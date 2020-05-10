@@ -10,7 +10,7 @@ type Thread struct {
 
 type Post struct {
 	ID       uuid.UUID `db:"id"`
-	ThreadId uuid.UUID `db:"thread_id"`
+	ThreadID uuid.UUID `db:"thread_id"`
 	Title    string    `db:"title"`
 	Content  string    `db:"content"`
 	Votes    int       `db:"votes"`
@@ -41,7 +41,7 @@ type PostStore interface {
 
 type CommentStore interface {
 	Comment(id uuid.UUID) (Comment, error)
-	CommentsByThread(threadID uuid.UUID) ([]Comment, error)
+	CommentsByPost(postID uuid.UUID) ([]Comment, error)
 	CreateComment(t *Comment) error
 	UpdateComment(t *Comment) error
 	DeleteComment(id uuid.UUID) error

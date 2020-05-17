@@ -25,7 +25,7 @@ func NewHandler(store goreddit.Store) *Handler {
 		r.Post("/{id}", h.ThreadsShow())
 		r.Post("/{id}/delete", h.ThreadsDelete())
 		r.Post("/{id}/new", h.PostsCreate())
-		r.Post("/{id}", h.PostsStore())
+		r.Post("/{id}", h.PostStore())
 		r.Post("/{threadID}/{postID}", h.PostsShow())
 	})
 

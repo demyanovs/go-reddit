@@ -9,9 +9,9 @@ import (
 	"net/http"
 )
 
-func NewHandler(store goreddit.Store) * Handler {
+func NewHandler(store goreddit.Store) *Handler {
 	h := &Handler{
-		Mux: chi.NewMux(),
+		Mux:   chi.NewMux(),
 		store: store,
 	}
 
@@ -23,13 +23,37 @@ func NewHandler(store goreddit.Store) * Handler {
 		r.Post("/{id}/delete", h.ThreadsDelete())
 	})
 
+	h.Get("/html", func(w http.ResponseWriter, r *http.Request) {
+		t := template.Must(template.ParseFiles("templates/layout.html"))
+
+		type params struct {
+			Title   string
+			Text    string
+			Lines   []string
+			Number1 int
+			Number2 int
+		}
+
+		t.Execute(w, params{
+			Title: "Reddit clone",
+			Text:  "Welcome to reddit clone",
+			Lines: []string{
+				"Line1",
+				"Line2",
+				"Line3",
+			},
+			Number1: 42,
+			Number2: 1337,
+		})
+	})
+
 	return h
 }
 
 type Handler struct {
 	*chi.Mux
 
-	store goreddit.Store 
+	store goreddit.Store
 }
 
 const threadsListHtml = `
@@ -95,8 +119,8 @@ func (h *Handler) ThreadStore() http.HandlerFunc {
 		description := r.FormValue("description")
 
 		if err := h.store.CreateThread(&goreddit.Thread{
-			ID: 		 uuid.New(),
-			Title: 		 title,
+			ID:          uuid.New(),
+			Title:       title,
 			Description: description,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

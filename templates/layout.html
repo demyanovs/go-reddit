@@ -2,8 +2,11 @@
 <html>
 
 <body>
+    {{block "header" .}}{{end}}
+
     <h1>{{.Title}}</h1>
-    <p>{{.Text}}</p>
+    {{template "paragraph" .Text}}
+
     <ul>
         {{range .Lines}}
             <li>{{.}}</li>
@@ -15,5 +18,12 @@
     {{else}}
         Numbers are not equal
     {{end}}
+    <br/>
+
+    {{block "content" .}}
+        Default content
+    {{end}}
+
+    {{block "footer" .}}{{end}}
 </body>
 </html>
